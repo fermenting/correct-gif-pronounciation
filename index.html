@@ -7,10 +7,14 @@
 </head>
 
 <style>
-button {
+  button {
   padding: 20px;
   font-size: 20px;
   margin: 10px;
+}
+img{
+  /* float: left;
+  display: inline; */
 }
 </style>
 
@@ -26,12 +30,14 @@ button {
   <!-- Javascript -->
   <script type="text/javascript">
 
+    
+
 
     //Giphy API key
     var APIkey = "PD1l8CCVzcui4CZF5w6PRwzwUn5VguIu";
 
     //Starter Array for da buttons
-    var internet = ["cats", "pizza", "meme", "fail", "troll", "lol", "crypto", "politics", "hashtag"]
+    var internet = ["gif", "cats", "pizza", "meme", "fail", "troll", "lol", "crypto", "politics", "hashtag"]
 
     //time to iterate and create buttons
     for (var i = 0; i < internet.length; i++) {
@@ -66,64 +72,73 @@ button {
       //reach out to giphy for content
       var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + subject + "&api_key=" + APIkey + "&limit=" + limit;
 
-$.ajax({
+      $.ajax({
         url: queryURL,
         method: "GET"
       })
 
-      //data received, now do:
-      .then(function (gobject) {
-        console.log("success got data", gobject);
+        //data received, now do:
+        .then(function (gobject) {
+          console.log("success got gobject", gobject);
 
-        //for each gif object received:
-        for (var i = 0; i < limit; i++) {
+          //for each gif object received:
+          for (var i = 0; i < limit; i++) {
 
-          //define-a all dem variables for dem gifs to display
-          var stopURL = gobject.data[i].images.fixed_height_still.url;
-          var goURL = gobject.data[i].images.fixed_height.url;
-          var gifRating = gobject.data[i].rating;
+            //make a div for tha gif
+            var displayGIF = $("<div>")
 
+            //define-a all dem variables for dem gifs to display
+            var stopURL = gobject.data[i].images.fixed_height_still.url;
+            var goURL = gobject.data[i].images.fixed_height.url;
+            var gifRating = gobject.data[i].rating;
 
-          //attacha all dem variables to da gif
-          var displayGIF = $("<div>");
-          displayGIF.attr("src", stopURL).attr("data-stop", stopURL).attr("data-go", goURL).attr("data-state", "stop").addClass("gif")
+            //display da gif rating
+            var rating = $("<p>")
+            rating.text("This gif is rated: " + gifRating)
+            displayGIF.append(rating)
 
-          //append da rating to da gif
-          var rating = $("<p>")
-          rating.text("This gif is rated: " + gifRating)
-          displayGIF.append(rating)
+            //attacha all dem variables to da gif
+            var imageGIF = $("<img>");
+            imageGIF.attr("src", stopURL).attr("data-stop", stopURL).attr("data-go", goURL).attr("data-state", "stop").addClass("gif")
+            displayGIF.append(imageGIF);
 
-          //appenda all dem gifs to da page
-          $("#display").append(displayGIF)
+            //appenda all dem gifs to da page
+            $("#display").append(displayGIF)
 
-          //end of iteration
-        }
+            //end of iteration
+          }
 
-        //end of data received
-      });
+          //end of data received
+        });
 
       //end of button click
-    })
+    });
+//what happens when a gif is clicked?
+$(document).on("click", ".gif",function() {
 
+// console.log("clack")
 
-    //what happens when a gif is clicked?
-    $(".gif").on("click", function () {
+      //collect the value of the current status
+      var state = $(this).attr("data-state")
+      // console.log(state)
+
 
       //if gif is stopped, make it go
-      var state = $(this).attr("data-state")
       if (state === "stop") {
         $(this).attr("data-state", "go")
         $(this).attr("src", $(this).attr("data-go"))
-        console.log(state)
+        // console.log(state)
       }
 
       //if gif is go, make it stop
       if (state === "go") {
         $(this).attr("data-state", "stop")
         $(this).attr("src", $(this).attr("data-stop"))
-        console.log(state)
+        // console.log(state)
       }
     });
+
+
 
 
   </script>
