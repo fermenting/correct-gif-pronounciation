@@ -6,15 +6,26 @@
   <title>guh-if OR jjj-if?</title>
 </head>
 
+<style>
+button {
+  padding: 20px;
+  font-size: 20px;
+  margin: 10px;
+}
+</style>
+
 <body>
   <!-- div for buttons to attach to -->
   <div id="button-zone"></div>
   <hr>
   <!-- div for gifs to attach to -->
   <div id="display"></div>
-  
-<!-- Let's do it all in one file -->
+
+  <!-- jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!-- Javascript -->
   <script type="text/javascript">
+
 
     //Giphy API key
     var APIkey = "PD1l8CCVzcui4CZF5w6PRwzwUn5VguIu";
@@ -37,14 +48,15 @@
 
 
     //button click functionality
-    $("<button>").on("click", function () {
+    $("button").on("click", function () {
 
       //clear the display
-      $("#display").clear();
+      $("#display").empty();
 
       //grab the text of the button clicked
       var subject = $(this).text();
-      
+      // console.log(subject)
+
       //replace any spaces with "+" for da URL
       subject.replace(" ", "+");
 
@@ -52,19 +64,24 @@
       var limit = 10;
 
       //reach out to giphy for content
-      var xhr = $.get("http://api.giphy.com/v1/gifs/search?q=" + subject + "&api_key=" + APIkey + "&limit=" + limit);
+      var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + subject + "&api_key=" + APIkey + "&limit=" + limit;
+
+$.ajax({
+        url: queryURL,
+        method: "GET"
+      })
 
       //data received, now do:
-      xhr.done(function (data) {
-        console.log("success got data", data);
+      .then(function (gobject) {
+        console.log("success got data", gobject);
 
         //for each gif object received:
         for (var i = 0; i < limit; i++) {
 
           //define-a all dem variables for dem gifs to display
-          var stopURL = data[i].images.fixed_height_still.url;
-          var goURL = data[i].images.fixed_height.url;
-          var gifRating = data[i].rating;
+          var stopURL = gobject.data[i].images.fixed_height_still.url;
+          var goURL = gobject.data[i].images.fixed_height.url;
+          var gifRating = gobject.data[i].rating;
 
 
           //attacha all dem variables to da gif
@@ -73,12 +90,11 @@
 
           //append da rating to da gif
           var rating = $("<p>")
-          rating.text("This gif rated: " + gifRating)
+          rating.text("This gif is rated: " + gifRating)
           displayGIF.append(rating)
 
-          //appenda all dem gifs to da page, overwriting what was dere before.
+          //appenda all dem gifs to da page
           $("#display").append(displayGIF)
-
 
           //end of iteration
         }
@@ -109,10 +125,8 @@
       }
     });
 
-  </script>
 
-  <!-- jQuery -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  </script>
 
 </body>
 
