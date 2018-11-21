@@ -1,0 +1,109 @@
+<!doctype <!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>guh-if OR jjj-if?</title>
+</head>
+
+<body>
+  <div id="button-zone"></div>
+ <hr>
+  <div id="display"></div>  
+<!-- GIPHY key PD1l8CCVzcui4CZF5w6PRwzwUn5VguIu  -->
+
+<!-- display example -->
+<img src="https://media1.giphy.com/media/3o85xkQpyMlnBkpB9C/200_s.gif" data-stop="https://media1.giphy.com/media/3o85xkQpyMlnBkpB9C/200_s.gif"
+    data-go="https://media1.giphy.com/media/3o85xkQpyMlnBkpB9C/200.gif" data-state="still" class="gif">
+
+
+
+
+
+<script type="text/javascript">
+
+//Starter Array for da buttons
+var internet = ["cats", "pizza", "meme", "fail", "troll", "lol", "crypto", "politics", "hashtag"]
+
+//time to iterate
+for (var i=0; i<internet.length; i++){
+
+//make-a dem buttons
+var gifButton = $("<button>")
+gifButton.text(internet[i])
+
+//appenda buttons to da button section
+$("#button-zone").append(gifButton)
+
+//end of da iteration
+}
+
+
+
+//define-a all dem variables for dem gifs to display
+var displayGIF = $("<div>");
+var srcURL;
+var stillURL;
+var animateURL;
+var state;
+var rating = $("<p>")
+var gifRating;
+
+//attacha all dem variables to da gif
+displayGIF.attr("src", srcURL).attr("data-stop", stillURL).attr("data-go", animateURL).attr("data-state", "stop").addClass("gif")
+
+//append da rating to da gif
+rating.text("This gif rated: " + gifRating)
+displayGIF.append(rating)
+
+//appenda all dem gifs to da page
+$("#display").append(displayGIF)
+
+
+
+
+
+$(".gif").on("click", function () {
+      // STEP ONE: study the html above.
+      // Look at all the data attributes.
+      // Run the file in the browser. Look at the images.
+
+      // After we complete steps 1 and 2 we'll be able to pause gifs from giphy.
+
+      // STEP TWO: make a variable named state and then store the image's data-state into it.
+      // Use the .attr() method for this.
+
+      // ============== FILL IN CODE HERE FOR STEP TWO =========================
+      var state = $(this).attr("data-state")
+      // CODE GOES HERE
+  
+      // =============================================
+
+      // STEP THREE: Check if the variable state is equal to 'still',
+      // then update the src attribute of this image to it's data-animate value,
+      // and update the data-state attribute to 'animate'.
+
+      // If state is equal to 'animate', then update the src attribute of this
+      // image to it's data-still value and update the data-state attribute to 'still'
+      // ============== FILL IN CODE HERE FOR STEP THREE =========================
+      if (state === "stop") {
+        $(this).attr("data-state", "go")
+        $(this).attr("src", $(this).attr("data-go"))
+        console.log(state)
+      }
+
+      if (state === "go") {
+        $(this).attr("data-state", "stop")
+        $(this).attr("src", $(this).attr("data-stop"))
+        console.log(state)
+      }
+      // CODE GOES HERE
+
+      // ==============================================
+
+      // STEP FOUR: open the file in the browser and click on the images.
+      // Then click again to pause.
+    });
+  </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</body>
+</html>
