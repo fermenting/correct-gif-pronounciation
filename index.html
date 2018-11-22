@@ -7,14 +7,31 @@
 </head>
 
 <style>
+  body{
+    background-image: linear-gradient(lightgrey, grey);
+  }
   button {
   padding: 20px;
   font-size: 20px;
-  margin: 10px;
-}
+  margin: 5px;
+  background-image: linear-gradient(green, yellow, purple);
+
+  }
 img{
-  /* float: left;
-  display: inline; */
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+}
+
+.gif-title{
+font-size: 20px;
+font-style: italic;
+text-align: center;
+}
+
+.gif-rating, h1, h2 {
+  text-align: center;
 }
 </style>
 
@@ -39,7 +56,7 @@ img{
   </form>
 
   <hr>
-  <h1>Click on any GIF to animate. Click again to stop.</h1>
+  <h1>Click on any GIF to start and stop the action!</h1>
   <!-- div for gifs to attach to -->
   <div id="display"></div>
 
@@ -53,7 +70,7 @@ img{
     var APIkey = "PD1l8CCVzcui4CZF5w6PRwzwUn5VguIu";
 
     //Starter Array for da buttons
-    var internet = ["gif", "cats", "pizza", "meme", "fail", "troll", "lol", "crypto", "politics", "hashtag"]
+    var internet = ["gif", "cats", "internet", "pizza", "meme", "fail", "troll", "lol", "crypto", "politics", "hashtag"]
 
     //function to create da buttons
     function create() {
@@ -106,20 +123,29 @@ img{
               var displayGIF = $("<div>")
 
               //define-a all dem variables for dem gifs to display
-              var stopURL = gobject.data[i].images.fixed_height_still.url;
-              var goURL = gobject.data[i].images.fixed_height.url;
+              var stopURL = gobject.data[i].images.original_still.url;
+              var goURL = gobject.data[i].images.original.url;
               var gifRating = gobject.data[i].rating.toUpperCase();
               var altText = gobject.data[i].title
-
               //attacha all dem variables to da gif
               var imageGIF = $("<img>");
               imageGIF.attr("src", stopURL).attr("data-stop", stopURL).attr("data-go", goURL).attr("data-state", "stop").addClass("gif").attr("alt", altText)
               displayGIF.append(imageGIF);
 
+              //display da title
+              var title = $("<p>")
+              title.addClass("gif-title")
+              title.text(altText)
+              displayGIF.append(title)
+
               //display da gif rating
               var rating = $("<p>")
-              rating.text("This gif is rated: " + gifRating)
+              rating.text("Rated: " + gifRating)
+              rating.addClass("gif-rating")
               displayGIF.append(rating)
+
+                //create some space
+                displayGIF.append("<br>")
 
               //appenda all dem gifs to da page
               $("#display").append(displayGIF)
