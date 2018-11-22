@@ -22,6 +22,22 @@ img{
   <h1>Click any button to grab some GIFs from Giphy!</h1>
   <!-- div for buttons to attach to -->
   <div id="button-zone"></div>
+  <h2>Don't see what you're looking for? add your own!</h2>
+  <form>
+    <input type="text" id="user-gif" value="Bernie Sanders"></input>
+    <button id="user-submit">GIF me!</button>
+  </form>
+
+  <!-- <form action="/action_page.php">
+  First name:<br>
+  <input type="text" name="firstname" value="Mickey">
+  <br>
+  Last name:<br>
+  <input type="text" name="lastname" value="Mouse">
+  <br><br> -->
+
+  </form>
+
   <hr>
   <h1>Click on any GIF to animate. Click again to stop.</h1>
   <!-- div for gifs to attach to -->
@@ -32,8 +48,6 @@ img{
   <!-- Javascript -->
   <script type="text/javascript">
 
-    
-
 
     //Giphy API key
     var APIkey = "PD1l8CCVzcui4CZF5w6PRwzwUn5VguIu";
@@ -41,85 +55,92 @@ img{
     //Starter Array for da buttons
     var internet = ["gif", "cats", "pizza", "meme", "fail", "troll", "lol", "crypto", "politics", "hashtag"]
 
-    //time to iterate and create buttons
-    for (var i = 0; i < internet.length; i++) {
+    //function to create da buttons
+    function create() {
+      //time to iterate and create buttons
+      for (var i = 0; i < internet.length; i++) {
 
-      //make-a dem buttons
-      var gifButton = $("<button>");
-      gifButton.text(internet[i]);
+        //make-a dem buttons
+        var gifButton = $("<button>");
+        gifButton.text(internet[i]);
+        gifButton.addClass("make-gif")
 
-      //appenda buttons to da button section
-      $("#button-zone").append(gifButton);
+        //appenda buttons to da button section
+        $("#button-zone").append(gifButton);
 
-      //end of da iteration
+        //end of da iteration
+      }
+
+      //button click functionality
+      $(".make-gif").on("click", function () {
+
+        //clear the display
+        $("#display").empty();
+
+        //grab the text of the button clicked
+        var subject = $(this).text();
+        // console.log(subject)
+
+        //replace any spaces with "+" for da URL
+        subject.replace(" ", "+");
+
+        //how many gifs are we to grab?
+        var limit = 10;
+
+        //reach out to giphy for content
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + subject + "&api_key=" + APIkey + "&limit=" + limit;
+
+        $.ajax({
+          url: queryURL,
+          method: "GET"
+        })
+
+          //data received, now do:
+          .then(function (gobject) {
+            console.log("success got gobject", gobject);
+
+            //for each gif object received:
+            for (var i = 0; i < limit; i++) {
+
+              //make a div for tha gif
+              var displayGIF = $("<div>")
+
+              //define-a all dem variables for dem gifs to display
+              var stopURL = gobject.data[i].images.fixed_height_still.url;
+              var goURL = gobject.data[i].images.fixed_height.url;
+              var gifRating = gobject.data[i].rating.toUpperCase();
+              var altText = gobject.data[i].title
+
+              //attacha all dem variables to da gif
+              var imageGIF = $("<img>");
+              imageGIF.attr("src", stopURL).attr("data-stop", stopURL).attr("data-go", goURL).attr("data-state", "stop").addClass("gif").attr("alt", altText)
+              displayGIF.append(imageGIF);
+
+              //display da gif rating
+              var rating = $("<p>")
+              rating.text("This gif is rated: " + gifRating)
+              displayGIF.append(rating)
+
+              //appenda all dem gifs to da page
+              $("#display").append(displayGIF)
+
+              //end of iteration
+            }
+
+            //end of data received
+          });
+
+        //end of button click
+      });
+
     }
 
+    create();
 
-    //button click functionality
-    $("button").on("click", function () {
+    //what happens when a gif is clicked?
+    $(document).on("click", ".gif", function () {
 
-      //clear the display
-      $("#display").empty();
-
-      //grab the text of the button clicked
-      var subject = $(this).text();
-      // console.log(subject)
-
-      //replace any spaces with "+" for da URL
-      subject.replace(" ", "+");
-
-      //how many gifs are we to grab?
-      var limit = 10;
-
-      //reach out to giphy for content
-      var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + subject + "&api_key=" + APIkey + "&limit=" + limit;
-
-      $.ajax({
-        url: queryURL,
-        method: "GET"
-      })
-
-        //data received, now do:
-        .then(function (gobject) {
-          console.log("success got gobject", gobject);
-
-          //for each gif object received:
-          for (var i = 0; i < limit; i++) {
-
-            //make a div for tha gif
-            var displayGIF = $("<div>")
-
-            //define-a all dem variables for dem gifs to display
-            var stopURL = gobject.data[i].images.fixed_height_still.url;
-            var goURL = gobject.data[i].images.fixed_height.url;
-            var gifRating = gobject.data[i].rating;
-            var altText = gobject.data[i].title
-
-            //attacha all dem variables to da gif
-            var imageGIF = $("<img>");
-            imageGIF.attr("src", stopURL).attr("data-stop", stopURL).attr("data-go", goURL).attr("data-state", "stop").addClass("gif").attr("alt", altText)
-            displayGIF.append(imageGIF);
-
-            //display da gif rating
-            var rating = $("<p>")
-            rating.text("This gif is rated: " + gifRating)
-            displayGIF.append(rating)
-
-            //appenda all dem gifs to da page
-            $("#display").append(displayGIF)
-
-            //end of iteration
-          }
-
-          //end of data received
-        });
-
-      //end of button click
-    });
-//what happens when a gif is clicked?
-$(document).on("click", ".gif",function() {
-
-// console.log("clack")
+      // console.log("clack")
 
       //collect the value of the current status
       var state = $(this).attr("data-state")
@@ -142,6 +163,23 @@ $(document).on("click", ".gif",function() {
     });
 
 
+    // form functionality on click of submit
+    $(document).on("click", "#user-submit", function () {
+      event.preventDefault();
+
+      // capture value in form and push into 'internet' array
+      var userGif = $("#user-gif").val().trim();
+      internet.push(userGif);
+
+      //empty the button div
+      $("#button-zone").empty();
+
+
+      //re-populate the button div and page functionality
+      create();
+
+
+    })
 
 
   </script>
