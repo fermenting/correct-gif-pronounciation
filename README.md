@@ -24,9 +24,20 @@ Next, there is a text input form below the buttons allowing users to enter a new
 
 Finally, when a button is clicked, the Giphy API is queried and produces static images of the gifs, appended by their ratings. Upon click of any of the images, they will animate. Users can stop and start gifs to their heart's content.
 
+## Looking Forward:
+
+I would like to add functionality to browse more gifs, using Giphy's Pagination Object. I would modify my search query to include a value for pagination, and increase the count on that value with each request. I would probably make more functions and make them more specific, so that I can call the components necessary for each task at hand.
+
 
 # Special Thanks
 
 * Jerome, Jimmy, & Sasha, for teaching me the fundamentals necessary to make this.
 * Christie Byrne, for showing me the proper click listener syntax.
 * My Wife, for reminding me how mobile un-friendly my project was.
+
+
+~~~
+
+gif !== jif
+
+~~~
