@@ -3,6 +3,8 @@
 
 ONCE AND FOR ALL, we will determine the correct way to pronounce ".gif". We will do this by calling gifs from Giphy and pausing them as we see fit.
 
+[See it in action!](https://fermenting.github.io/correct-gif-pronounciation/)
+
 ![internet web surfing GIF](https://media0.giphy.com/media/eCwAEs05phtK/giphy.gif)
 
 ## OK, so we may never know...
